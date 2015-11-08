@@ -15,6 +15,10 @@ class TodoStore : Store<[Todo]> {
 
         self.bindAction(TodoActions.Create.self, handler: self.onCreate)
         self.bindAction(TodoActions.List.self, handler: self.onList)
+        
+        self.bindAction(TodoActions.Create.self) { [weak self] (action) -> () in
+            self?.state.append(Todo(title: action.title))
+        }
     }
 
     private func onCreate(action: TodoActions.Create) {
