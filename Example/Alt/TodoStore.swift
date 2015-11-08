@@ -12,7 +12,7 @@ import Alt
 class TodoStore : Store {
     private var todos : [Todo] = []
     
-    override init() {
+    init() {
         super.init()
 
         self.bindAction(TodoActions.Create.self) { [weak self] (payload) -> () in

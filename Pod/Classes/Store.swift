@@ -9,11 +9,15 @@
 import Foundation
 
 public class Store {
-    public init() {
+    private let dispatcher : Dispatcher
+    let dispatcherToken : String
+
+    public init(dispatcher: Dispatcher = Alt.dispatcher) {
+        self.dispatcher = dispatcher
     }
 
     public func bindAction<T: Action>(actionType: T.Type, handler: (T) -> ()) {
-        Alt.dispatcher.register(actionType, handler: handler)
+        self.dispatcher.register(handler)
     }
     
     public func listen<T: Store>(handler: (T) -> (Void)) {
