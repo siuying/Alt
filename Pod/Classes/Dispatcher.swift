@@ -81,7 +81,12 @@ public class Dispatcher {
     }
 
     /// Set up bookkeeping needed when dispatching.
-    private func startDispatching(action: Action) {
+    private func startDispatching<T: Action>(action: T) {
+        for callback in self.callbacks.values {
+            if let callback = callback as? DispatchCallback<T> {
+                callback.status = .Waiting
+            }
+        }
         self.pendingAction = action
         self.isDispatching = true
     }

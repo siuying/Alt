@@ -20,7 +20,9 @@ class ViewController: UITableViewController {
         }
 
         self.todoStore.listen { (state) -> (Void) in
-            self.tableView.reloadData()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.tableView.reloadData()                
+            })
         }
 
         Alt.dispatch(TodoActions.List())
