@@ -78,24 +78,25 @@ public class Dispatcher {
     }
 
     /// Set up bookkeeping needed when dispatching.
-    private func startDispatching<T: Action>(action: T) {
+    func startDispatching<T: Action>(action: T) {
         for callback in self.callbacks.values {
             if let callback = callback as? DispatchCallback<T> {
                 callback.status = .Waiting
             }
         }
+        
         self.pendingAction = action
         self.isDispatching = true
     }
     
     /// Clear bookkepping used for dispatching
-    private func stopDispatching() {
+    func stopDispatching() {
         self.pendingAction = nil
         self.isDispatching = false
     }
 
     /// Call the callback stored with the given id. Also do some internal bookkeeping.
-    private func invokeCallback<T: Action>(callback: DispatchCallback<T>) {
+    func invokeCallback<T: Action>(callback: DispatchCallback<T>) {
         if let action = self.pendingAction as? T {
             callback.status = .Pending
             callback.handler(action)
