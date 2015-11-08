@@ -8,30 +8,21 @@
 
 import Foundation
 
-public protocol Dispatcher {
-    func dispatch<T: Action>(action: T)
-    func register<T: Action>(type: T.Type, handler: T -> Void) -> String
-    func unregister(token: String)
-    func waitFor<T: Action>(tokens: [String], action: T)
-}
-
-public class DefaultDispatcher : Dispatcher {
+public class Dispatcher {
     private var callbacks: [String:AnyObject] = [:]
     private var isDispatching = false
     private var isHandled: [String:Bool] = [:]
     private var isPending: [String:Bool] = [:]
     private var lastId = 1
 
-    public static let sharedInstance = DefaultDispatcher()
-
-    private init() {
+    internal init() {
     }
     
     /// Registers a callback to be invoked with every dispatched payload. Returns
     /// a token that can be used with `waitFor()`.
-    public func register<T: Action>(action: T.Type, handler: (T) -> Void) -> String {
+    public func register<T: Action>(actionType: T.Type, handler: (T) -> Void) -> String {
         let nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
-        self.callbacks[nextDispatchToken] = DispatchCallback<T>(action: action, handler: handler)
+        self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
         return nextDispatchToken
     }
 
@@ -110,12 +101,12 @@ public class DefaultDispatcher : Dispatcher {
 }
 
 internal class DispatchCallback<T: Action> {
-    let action: T.Type
+    let actionType: T.Type
     let handler: (T) -> Void
     var status: DispatchStatus = DispatchStatus.Waiting
     
-    init(action: T.Type, handler: (T) -> Void) {
-        self.action = action
+    init(actionType: T.Type, handler: (T) -> Void) {
+        self.actionType = actionType
         self.handler = handler
     }
 }

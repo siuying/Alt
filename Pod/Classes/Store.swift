@@ -8,23 +8,17 @@
 
 import Foundation
 
-public protocol Store {
-    var dispatchToken : String { get }
+public class Store {
+    public init() {
+    }
 
-    func bindAction<T: Action>(actionType: T.Type, handler: (T) -> ())
-    
-    func listen(handler: (Self) -> (Void))
-    
-    func unlisten(handler: (Self) -> (Void))
-}
-
-public extension Store {
     public func bindAction<T: Action>(actionType: T.Type, handler: (T) -> ()) {
+        Alt.dispatcher.register(actionType, handler: handler)
     }
     
-    public func listen(handler: (Self) -> (Void)) {
+    public func listen<T: Store>(handler: (T) -> (Void)) {
     }
     
-    public func unlisten(handler: (Self) -> (Void)) {
+    public func unlisten<T: Store>(handler: (T) -> (Void)) {
     }
 }

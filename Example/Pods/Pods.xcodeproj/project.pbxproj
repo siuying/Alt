@@ -11,6 +11,7 @@
 		2699B13816A29EB260A0B2B9A04830AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		2ED8D016AFCF2443428DC536B121D52F /* Pods-Alt_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F7221AB578AA4EFE6227FA832D44DF4E /* Pods-Alt_Example-dummy.m */; };
 		3D1A235C0DF4B42C545276AF9EEF5BD2 /* Alt.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7638E8A8DEB08423AC87C3F38B59194A /* Alt.bundle */; };
+		54493E831BEF4414001FB7A4 /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54493E821BEF4414001FB7A4 /* EventEmitter.swift */; };
 		54C28B421BEF355C007490CB /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C28B411BEF355C007490CB /* Action.swift */; };
 		54C28B441BEF356B007490CB /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C28B431BEF356B007490CB /* Dispatcher.swift */; };
 		54C28B461BEF3584007490CB /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C28B451BEF3584007490CB /* Store.swift */; };
@@ -54,6 +55,7 @@
 		32C9FDFE8DCA442E183F10368E1405B9 /* Pods-Alt_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Alt_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		41AA450DEE64A5CA17157E9BFDD064BF /* Alt.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Alt.modulemap; sourceTree = "<group>"; };
+		54493E821BEF4414001FB7A4 /* EventEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
 		54C28B411BEF355C007490CB /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		54C28B431BEF356B007490CB /* Dispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		54C28B451BEF3584007490CB /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				54C28B431BEF356B007490CB /* Dispatcher.swift */,
 				54C28B411BEF355C007490CB /* Action.swift */,
 				54C28B451BEF3584007490CB /* Store.swift */,
+				54493E821BEF4414001FB7A4 /* EventEmitter.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7613B81A25A856DBC0F1FFD900B29ABA /* Alt-dummy.m in Sources */,
+				54493E831BEF4414001FB7A4 /* EventEmitter.swift in Sources */,
 				54C28B421BEF355C007490CB /* Action.swift in Sources */,
 				54C28B441BEF356B007490CB /* Dispatcher.swift in Sources */,
 				54C28B481BEF3634007490CB /* Alt.swift in Sources */,

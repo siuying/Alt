@@ -14,6 +14,6 @@ public protocol Action {
 
 public extension Action {
     public func dispatch() {
-       Dispatcher.sharedInstance.dispatch(self)
+        Alt.dispatcher.dispatch(self)
     }
 }

@@ -9,6 +9,8 @@
 import Foundation
 
 public class Alt {
+    public static let dispatcher = Dispatcher()
+
     public static func createStore<T : Store>(store: T) -> String {
         return ""
     }
