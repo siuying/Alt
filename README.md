@@ -1,12 +1,60 @@
 # Alt
 
-Another Flux implementation for Swift.
+Another [Flux](https://facebook.github.io/flux/) implementation for Swift. It provides concept of "one-way data flow" with type-safe modules by Swift language.
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+### Step 1: Define Action
+
+- Create struct that implements protocol ``Action``.
+
+```swift
+struct TodoActions {
+    struct Create : Action {
+        let title : String
+    }
+}
+```
+
+### Step 2: Define Store and register action
+
+- Create a subclass of ``Store`` with the model state as State
+- Bind Actions to handers, where the model perform action tasks
+
+```swift
+class TodoStore : Store<[Todo]> {
+    init(state: [Todo]) {
+        super.init(state: state)
+
+        self.bindAction(TodoActions.Create.self, handler: self.onCreate)
+    }
+
+    private func onCreate(action: TodoActions.Create) {
+        self.state.append(Todo(title: action.title))
+    }
+}
+```
+
+### Step 3: Listen store's event at View
+
+- Register listeners to ``store.state`` change by ``Store.listen()``
+- Force an store update by calling ``store.emitChange()``
+
+```swift
+self.todoStore.listen { (state) -> (Void) in
+    self.tableView.reloadData()
+}
+```
+
+### Step 4: Create and dispatch an Action
+
+```swift
+TodoActions.Create(title: "New ToDo").dispatch()
+```
 
 ## Requirements
+
+- Swift 2.0
 
 ## Installation
 

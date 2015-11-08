@@ -25,7 +25,7 @@ class ViewController: UITableViewController {
             })
         }
 
-        Alt.dispatch(TodoActions.List())
+        TodoActions.List().dispatch()
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,7 +45,7 @@ class ViewController: UITableViewController {
     
     @IBAction func createTodo() {
         let count = self.todoStore.state.count
-        Alt.dispatch(TodoActions.Create(title: "New ToDo \(count+1)"))
+        TodoActions.Create(title: "New ToDo \(count+1)").dispatch()
     }
 }
 

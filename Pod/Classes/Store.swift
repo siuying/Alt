@@ -21,7 +21,7 @@ public class Store<State> {
 
     public var state : State {
         didSet {
-            self.eventEmitter.emit(StoreChangeEvent)
+            self.emitChange()
         }
     }
     
@@ -35,14 +35,17 @@ public class Store<State> {
         self.eventEmitter = EventEmitter()
     }
 
+    /// Bind an Action to a Handler
     public func bindAction<T: Action>(actionType: T.Type, handler: (T) -> ()) -> String {
         return self.dispatcher.register(actionType, handler: handler)
     }
-    
+
+    /// Unbind an Action
     public func unbindAction(identifier: String) {
         self.dispatcher.unregister(identifier)
     }
     
+    /// Register StoreListener that listen to changes of this store
     public func listen(handler: StoreListener) -> String {
         let id = "event_listener_\(self.dynamicType)_\(lastId++)"
         let subscription = self.eventEmitter.addListener(StoreChangeEvent) { [weak self] (object) -> () in
@@ -53,7 +56,8 @@ public class Store<State> {
         self.subscriptions[id] = subscription
         return id
     }
-    
+
+    /// Unregister StoreListener that listen to changes of this store
     public func unlisten(identifier: String) {
         if let subscription = self.subscriptions[identifier] {
             self.eventEmitter.removeListenerWithSubscription(subscription)
@@ -62,6 +66,11 @@ public class Store<State> {
         }
     }
     
+    /// Emit change to any listeners
+    public func emitChange() {
+        self.eventEmitter.emit(StoreChangeEvent)
+    }
+
     public func unregister() {
         for actionId in self.actionIds {
             self.unbindAction(actionId)

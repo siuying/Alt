@@ -10,8 +10,4 @@ import Foundation
 
 public class Alt {
     public static let dispatcher = Dispatcher()
-    
-    public static func dispatch<T: Action>(action: T) {
-        self.dispatcher.dispatch(action)
-    }
 }
