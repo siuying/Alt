@@ -16,8 +16,8 @@ public class Store<State> {
     private let eventEmitter : EventEmitter
     private var lastId = 1
 
-    private var subscriptions : [String:EventSubscription] = [:]
     private var actionIds : [String] = []
+    private var subscriptions : [String:EventSubscription] = [:]
 
     public var state : State {
         didSet {
@@ -37,12 +37,17 @@ public class Store<State> {
 
     /// Bind an Action to a Handler
     public func bindAction<T: Action>(actionType: T.Type, handler: (T) -> ()) -> String {
-        return self.dispatcher.register(actionType, handler: handler)
+        let id = self.dispatcher.register(actionType, handler: handler)
+        self.actionIds.append(id)
+        return id
     }
 
     /// Unbind an Action
     public func unbindAction(identifier: String) {
         self.dispatcher.unregister(identifier)
+        if let index = self.actionIds.indexOf(identifier) {
+            self.actionIds.removeAtIndex(index)
+        }
     }
     
     /// Register StoreListener that listen to changes of this store
@@ -61,6 +66,7 @@ public class Store<State> {
     public func unlisten(identifier: String) {
         if let subscription = self.subscriptions[identifier] {
             self.eventEmitter.removeListenerWithSubscription(subscription)
+            self.subscriptions.removeValueForKey(identifier)
         } else {
             fatalError("Store: listener with id \(identifier) not found")
         }
@@ -69,6 +75,11 @@ public class Store<State> {
     /// Emit change to any listeners
     public func emitChange() {
         self.eventEmitter.emit(StoreChangeEvent)
+    }
+
+    /// Wait for all actions registered in a store
+    public func waitFor<T: Action>(actionType: T.Type) {
+        self.dispatcher.waitFor(self.actionIds, actionType: actionType)
     }
 
     public func unregister() {
