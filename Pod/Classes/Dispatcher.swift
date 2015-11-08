@@ -13,9 +13,10 @@ public class Dispatcher {
     private var isDispatching = false
     private var isHandled: [String:Bool] = [:]
     private var isPending: [String:Bool] = [:]
+    private var pendingAction : Action?
     private var lastId = 1
 
-    internal init() {
+    public init() {
     }
     
     /// Registers a callback to be invoked with every dispatched payload. Returns
@@ -36,7 +37,7 @@ public class Dispatcher {
     /// Waits for the callbacks specified to be invoked before continuing execution
     /// of the current callback. This method should only be used by a callback in
     /// response to a dispatched payload.
-    public func waitFor<T: Action>(tokens: [String], action: T) {
+    public func waitFor<T: Action>(tokens: [String], actionType: T.Type) {
         precondition(self.isDispatching, "Dispatcher.waitFor(...): Must be invoked while dispatching.")
 
         for token in tokens {
@@ -49,7 +50,7 @@ public class Dispatcher {
                     fatalError("Dispatcher.waitFor(...): Circular dependency detected while waiting for \(token)")
 
                 case .Waiting:
-                    self.invokeCallback(token, action: action)
+                    self.invokeCallback(token, actionType: actionType)
                 }
 
             } else {
@@ -71,7 +72,7 @@ public class Dispatcher {
                 }
             }
 
-            self.invokeCallback(id, action: action)
+            self.invokeCallback(id, actionType: action.dynamicType)
         }
 
         stopDispatching()
@@ -83,17 +84,19 @@ public class Dispatcher {
             self.isPending[id] = false
             self.isHandled[id] = false
         }
+        self.pendingAction = action
         self.isDispatching = true
     }
     
     /// Clear bookkepping used for dispatching
     private func stopDispatching() {
+        self.pendingAction = nil
         self.isDispatching = false
     }
 
     /// Call the callback stored with the given id. Also do some internal bookkeeping.
-    private func invokeCallback<T: Action>(token: String, action: T) {
-        if let callback = self.callbacks[token] as? DispatchCallback<T> {
+    private func invokeCallback<T: Action>(token: String, actionType: T.Type) {
+        if let callback = self.callbacks[token] as? DispatchCallback<T>, let action = self.pendingAction as? T {
             callback.status = .Pending
             callback.handler(action)
             callback.status = .Handled
