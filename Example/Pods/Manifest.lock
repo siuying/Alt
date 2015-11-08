@@ -1,0 +1,14 @@
+PODS:
+  - Alt (0.1.0)
+
+DEPENDENCIES:
+  - Alt (from `../`)
+
+EXTERNAL SOURCES:
+  Alt:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alt: 4642ca1e4e9cf69a2b9629abc29baabdf7014afb
+
+COCOAPODS: 0.39.0
