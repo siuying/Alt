@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version          = "0.1.0"
   s.summary          = "Another Flux implementation for Swift."
 
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/Alt"
+  s.homepage         = "https://github.com/siuying/Alt"
   s.license          = 'MIT'
   s.author           = { "Francis Chong" => "francis@ignition.hk" }
   s.source           = { :git => "https://github.com/siuying/Alt.git", :tag => s.version.to_s }
