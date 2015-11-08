@@ -20,7 +20,7 @@ public class Dispatcher {
     /// Registers a callback to be invoked with every dispatched payload. Returns
     /// a token that can be used with `waitFor()`.
     public func register<T: Action>(actionType: T.Type, handler: (T) -> Void) -> String {
-        var nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
+        let nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
         self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
         return nextDispatchToken
     }
