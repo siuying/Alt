@@ -9,7 +9,7 @@
 import Foundation
 
 public class Dispatcher {
-    private var callbacks: [String:AnyObject] = [:]
+    private var callbacks: [String:AnyObject] = [:] // this should be [String:DispatchCallback<Some Action>], but I dont sure how to do it in Swift yet
     private var isDispatching = false
     private var pendingAction : Action?
     private var lastId = 1
