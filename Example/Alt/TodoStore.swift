@@ -10,13 +10,19 @@ import Foundation
 import Alt
 
 class TodoStore : Store<[Todo]> {
-    private var todos : [Todo] = []
-    
-    init() {
-        super.init()
+    init(state: [Todo]) {
+        super.init(state: state)
 
-        self.bindAction(TodoActions.Create.self) { [weak self] (payload) -> () in
-            self?.todos.append(Todo(title: payload.title))
+        self.bindAction(TodoActions.Create.self) { [weak self] (action) -> () in
+            if let store = self {
+                store.state.append(Todo(title: action.title))
+            }
+        }
+        
+        self.bindAction(TodoActions.List.self) { [weak self] (action) -> () in
+            if let store = self {
+                store.state = action.todos
+            }
         }
     }
 }

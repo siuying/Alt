@@ -65,8 +65,10 @@ public class Dispatcher {
         startDispatching(action)
         
         for (id, _) in self.callbacks {
-            if self.isPending[id] != nil {
-                continue
+            if let pending = self.isPending[id] {
+                if pending {
+                    continue                    
+                }
             }
 
             self.invokeCallback(id, action: action)
@@ -81,7 +83,6 @@ public class Dispatcher {
             self.isPending[id] = false
             self.isHandled[id] = false
         }
-
         self.isDispatching = true
     }
     

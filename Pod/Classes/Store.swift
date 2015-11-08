@@ -11,6 +11,7 @@ import Foundation
 let StoreChangeEvent = "CHANGE"
 
 public class Store<State> {
+    public typealias StoreListener = State -> ()
     private let dispatcher : Dispatcher
     private let eventEmitter : EventEmitter
     private var lastId = 1
@@ -18,7 +19,7 @@ public class Store<State> {
     private var subscriptions : [String:EventSubscription] = [:]
     private var actionIds : [String] = []
 
-    public var state : State? {
+    public var state : State {
         didSet {
             self.eventEmitter.emit(StoreChangeEvent)
         }
@@ -28,7 +29,8 @@ public class Store<State> {
         self.subscriptions.removeAll()
     }
 
-    public init(dispatcher: Dispatcher = Alt.dispatcher) {
+    public init(state: State, dispatcher: Dispatcher = Alt.dispatcher) {
+        self.state = state
         self.dispatcher = dispatcher
         self.eventEmitter = EventEmitter()
     }
@@ -41,7 +43,7 @@ public class Store<State> {
         self.dispatcher.unregister(identifier)
     }
     
-    public func listen(handler: (State?) -> (Void)) -> String {
+    public func listen(handler: StoreListener) -> String {
         let id = "event_listener_\(self.dynamicType)_\(lastId++)"
         let subscription = self.eventEmitter.addListener(StoreChangeEvent) { [weak self] (object) -> () in
             if let store = self {
