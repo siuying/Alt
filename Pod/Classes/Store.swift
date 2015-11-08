@@ -61,4 +61,16 @@ public class Store<State> {
             fatalError("Store: listener with id \(identifier) not found")
         }
     }
+    
+    public func unregister() {
+        for actionId in self.actionIds {
+            self.unbindAction(actionId)
+        }
+        self.actionIds.removeAll()
+        
+        for (key, _) in self.subscriptions {
+            self.unlisten(key)
+        }
+        self.subscriptions.removeAll()
+    }
 }
