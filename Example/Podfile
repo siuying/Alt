@@ -7,6 +7,5 @@ end
 
 target 'Alt_Tests', :exclusive => true do
   pod "Alt", :path => "../"
-
-  
+  pod "Nimble"  
 end

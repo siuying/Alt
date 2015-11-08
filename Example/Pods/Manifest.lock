@@ -1,8 +1,10 @@
 PODS:
   - Alt (0.1.0)
+  - Nimble (3.0.0)
 
 DEPENDENCIES:
   - Alt (from `../`)
+  - Nimble
 
 EXTERNAL SOURCES:
   Alt:
@@ -10,5 +12,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alt: 4642ca1e4e9cf69a2b9629abc29baabdf7014afb
+  Nimble: 4c353d43735b38b545cbb4cb91504588eb5de926
 
 COCOAPODS: 0.39.0

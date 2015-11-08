@@ -12,8 +12,10 @@ import Alt
 class TodoStore : Store {
     private var todos : [Todo] = []
     
-    init() {
-        self.bindAction(TodoActions.Create) { [weak self] (payload) -> () in
+    override init() {
+        super.init()
+
+        self.bindAction(TodoActions.Create.self) { [weak self] (payload) -> () in
             self?.todos.append(Todo(title: payload.title))
         }
     }

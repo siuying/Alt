@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '015A634E90B917051955B58C'
+               BlueprintIdentifier = 'D19711B1BA738C14709D47E6'
                BlueprintName = 'Alt'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Alt.framework'>
