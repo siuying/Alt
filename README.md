@@ -1,9 +1,6 @@
 # Alt
 
-[![CI Status](http://img.shields.io/travis/Francis Chong/Alt.svg?style=flat)](https://travis-ci.org/Francis Chong/Alt)
-[![Version](https://img.shields.io/cocoapods/v/Alt.svg?style=flat)](http://cocoapods.org/pods/Alt)
-[![License](https://img.shields.io/cocoapods/l/Alt.svg?style=flat)](http://cocoapods.org/pods/Alt)
-[![Platform](https://img.shields.io/cocoapods/p/Alt.svg?style=flat)](http://cocoapods.org/pods/Alt)
+Another Flux implementation for Swift.
 
 ## Usage
 
