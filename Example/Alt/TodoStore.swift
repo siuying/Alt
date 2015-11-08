@@ -13,16 +13,15 @@ class TodoStore : Store<[Todo]> {
     init(state: [Todo]) {
         super.init(state: state)
 
-        self.bindAction(TodoActions.Create.self) { [weak self] (action) -> () in
-            if let store = self {
-                store.state.append(Todo(title: action.title))
-            }
-        }
-        
-        self.bindAction(TodoActions.List.self) { [weak self] (action) -> () in
-            if let store = self {
-                store.state = action.todos
-            }
-        }
+        self.bindAction(TodoActions.Create.self, handler: self.onCreate)
+        self.bindAction(TodoActions.List.self, handler: self.onList)
+    }
+
+    private func onCreate(action: TodoActions.Create) {
+        self.state.append(Todo(title: action.title))
+    }
+    
+    private func onList(action: TodoActions.List) {
+        self.state = action.todos
     }
 }
