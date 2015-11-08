@@ -13,6 +13,8 @@ import Nimble
 struct TestAction : Action {
     let title : String
 }
+struct TestAction2 : Action {
+}
 
 class DispatcherTests: XCTestCase {
 
@@ -56,24 +58,34 @@ class DispatcherTests: XCTestCase {
         
         var states : [Int] = []
         var state = 0
+
         let token1 = dispatcher.register(TestAction.self) { (action) -> Void in
             state = 1
             states.append(1)
         }
+
         let token2 = dispatcher.register(TestAction.self) { (action) -> Void in
             dispatcher.waitFor([token1], actionType: TestAction.self)
             state = 2
             states.append(2)
         }
-        let token3 = dispatcher.register(TestAction.self) { (action) -> Void in
+        
+        let _ = dispatcher.register(TestAction.self) { (action) -> Void in
             dispatcher.waitFor([token1, token2], actionType: TestAction.self)
             state = 3
             states.append(3)
         }
 
+        // this is not invoked
+        let _ = dispatcher.register(TestAction2.self) { (action) -> Void in
+            dispatcher.waitFor([token1], actionType: TestAction2.self)
+            state = 4
+            states.append(4)
+        }
+
         dispatcher.dispatch(TestAction(title: "Hello"))
-        expect(state).toNotEventually(equal(3))
-        expect(states).toNotEventually(equal([1,2,3]))
+        expect(state).toEventually(equal(3))
+        expect(states).toEventually(equal([1,2,3]))
     }
 
 }

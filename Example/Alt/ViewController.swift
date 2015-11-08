@@ -14,7 +14,11 @@ class ViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        if App.isTestTarget() {
+            return
+        }
+
         self.todoStore.listen { (state) -> (Void) in
             self.tableView.reloadData()
         }

@@ -11,18 +11,19 @@ import Foundation
 public class Dispatcher {
     private var callbacks: [String:AnyObject] = [:]
     private var isDispatching = false
-    private var isHandled: [String:Bool] = [:]
-    private var isPending: [String:Bool] = [:]
     private var pendingAction : Action?
     private var lastId = 1
+    private var queue : dispatch_queue_t
 
     public init() {
+        self.queue = dispatch_queue_create("Alt.Dispatcher", DISPATCH_QUEUE_SERIAL)
     }
     
     /// Registers a callback to be invoked with every dispatched payload. Returns
     /// a token that can be used with `waitFor()`.
     public func register<T: Action>(actionType: T.Type, handler: (T) -> Void) -> String {
-        let nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
+        var nextDispatchToken : String!
+        nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
         self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
         return nextDispatchToken
     }
@@ -50,7 +51,7 @@ public class Dispatcher {
                     fatalError("Dispatcher.waitFor(...): Circular dependency detected while waiting for \(token)")
 
                 case .Waiting:
-                    self.invokeCallback(token, actionType: actionType)
+                    self.invokeCallback(callback)
                 }
 
             } else {
@@ -62,28 +63,25 @@ public class Dispatcher {
     /// Dispatches a payload to all registered callbacks.
     public func dispatch<T: Action>(action: T) {
         precondition(!self.isDispatching, "Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.")
+
+        self.startDispatching(action)
         
-        startDispatching(action)
-        
-        for (id, _) in self.callbacks {
-            if let pending = self.isPending[id] {
-                if pending {
-                    continue                    
+        for callback in self.callbacks.values {
+            if let callback = callback as? DispatchCallback<T> {
+                switch callback.status {
+                case .Pending, .Handled:
+                    continue
+                default:
+                    self.invokeCallback(callback)
                 }
             }
-
-            self.invokeCallback(id, actionType: action.dynamicType)
         }
-
-        stopDispatching()
+        
+        self.stopDispatching()
     }
 
     /// Set up bookkeeping needed when dispatching.
     private func startDispatching(action: Action) {
-        for (id, _) in self.callbacks {
-            self.isPending[id] = false
-            self.isHandled[id] = false
-        }
         self.pendingAction = action
         self.isDispatching = true
     }
@@ -95,8 +93,8 @@ public class Dispatcher {
     }
 
     /// Call the callback stored with the given id. Also do some internal bookkeeping.
-    private func invokeCallback<T: Action>(token: String, actionType: T.Type) {
-        if let callback = self.callbacks[token] as? DispatchCallback<T>, let action = self.pendingAction as? T {
+    private func invokeCallback<T: Action>(callback: DispatchCallback<T>) {
+        if let action = self.pendingAction as? T {
             callback.status = .Pending
             callback.handler(action)
             callback.status = .Handled

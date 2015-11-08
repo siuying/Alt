@@ -7,15 +7,18 @@
 //
 
 import UIKit
+class App {
+    static func isTestTarget() -> Bool {
+        return NSProcessInfo.processInfo().environment["XCInjectBundle"] != nil
+    }
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
         return true
     }
 
