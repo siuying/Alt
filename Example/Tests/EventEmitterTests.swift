@@ -97,9 +97,23 @@ class EventEmitterTests: XCTestCase {
             emitter?.removeCurrentListener()
         }
         expect(emitter.listeners(eventType).count).to(equal(1))
-
+        
         emitter.emit(eventType, object: 1)
         expect(emitter.listeners(eventType).count).toEventually(equal(0))
-
+        
+    }
+    
+    
+    func testRemoveWithSubscription() {
+        let eventType = "someEvent1"
+        let emitter = EventEmitter()
+        let sub = emitter.addListener(eventType) { [weak emitter] (object) -> () in
+            emitter?.removeCurrentListener()
+        }
+        expect(emitter.listeners(eventType).count).to(equal(1))
+        
+        emitter.removeListenerWithSubscription(sub)
+        expect(emitter.listeners(eventType).count).toEventually(equal(0))
+        
     }
 }

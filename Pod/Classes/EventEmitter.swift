@@ -34,6 +34,11 @@ public class EventEmitter {
         return self.subscriber.addSubscription(eventType, subscription: EventSubscription(subscriber: self.subscriber, listener: internalListener))
     }
 
+    /// Remove listener with the corresponding subscription
+    public func removeListenerWithSubscription(subscription: EventSubscription) {
+        self.subscriber.removeSubscription(subscription)
+    }
+
     /// Removes all of the registered listeners, including those registered as
     /// listener maps.
     public func removeAllListeners(eventType: String?) {
@@ -101,7 +106,6 @@ internal class EventSubscriptionVendor {
         if self.subscriptionsForType[type] == nil {
             self.subscriptionsForType[type] = []
         }
-
         let key = self.subscriptionsForType[type]!.count
         self.subscriptionsForType[type]!.append(subscription)
         subscription.eventType = type

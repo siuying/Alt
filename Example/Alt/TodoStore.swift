@@ -9,7 +9,7 @@
 import Foundation
 import Alt
 
-class TodoStore : Store {
+class TodoStore : Store<[Todo]> {
     private var todos : [Todo] = []
     
     init() {
