@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'Alt_Example', :exclusive => true do
+  pod "Alt", :path => "../"
+end
+
+target 'Alt_Tests', :exclusive => true do
+  pod "Alt", :path => "../"
+
+  
+end
