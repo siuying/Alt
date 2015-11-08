@@ -13,17 +13,14 @@ public class Dispatcher {
     private var isDispatching = false
     private var pendingAction : Action?
     private var lastId = 1
-    private var queue : dispatch_queue_t
 
     public init() {
-        self.queue = dispatch_queue_create("Alt.Dispatcher", DISPATCH_QUEUE_SERIAL)
     }
     
     /// Registers a callback to be invoked with every dispatched payload. Returns
     /// a token that can be used with `waitFor()`.
     public func register<T: Action>(actionType: T.Type, handler: (T) -> Void) -> String {
-        var nextDispatchToken : String!
-        nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
+        var nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
         self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
         return nextDispatchToken
     }
