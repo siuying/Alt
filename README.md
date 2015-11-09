@@ -18,7 +18,7 @@ struct TodoActions {
 
 ### Step 2: Define Store and register action
 
-- Create a subclass of ``Store`` with the model state as State
+- Create a subclass of ``Store<State>`` with the model state as State
 - Bind Actions to handers, where the model perform action tasks
 
 ```swift
