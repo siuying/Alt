@@ -19,6 +19,9 @@ public class Store<State> {
     private var actionIds : [String] = []
     private var subscriptions : [String:EventSubscription] = [:]
 
+    /// Queue to run on listeners, by default main queue
+    public var listenerQueue : dispatch_queue_t = dispatch_get_main_queue()
+
     public var state : State {
         didSet {
             self.emitChange()
@@ -74,7 +77,9 @@ public class Store<State> {
     
     /// Emit change to any listeners
     public func emitChange() {
-        self.eventEmitter.emit(StoreChangeEvent)
+        dispatch_async(listenerQueue) { [weak self] () -> Void in
+            self?.eventEmitter.emit(StoreChangeEvent)
+        }
     }
 
     /// Wait for all actions registered in a store

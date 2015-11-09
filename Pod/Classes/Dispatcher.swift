@@ -13,6 +13,8 @@ public class Dispatcher {
     private var isDispatching = false
     private var pendingAction : Action?
     private var lastId = 1
+    
+    private var queue : dispatch_queue_t = dispatch_queue_create("Alt.Dispatcher", DISPATCH_QUEUE_SERIAL)
 
     public init() {
     }
@@ -20,16 +22,20 @@ public class Dispatcher {
     /// Registers a callback to be invoked with every dispatched payload. Returns
     /// a token that can be used with `waitFor()`.
     public func register<T: Action>(actionType: T.Type, handler: (T) -> Void) -> String {
-        let nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
-        self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
+        var nextDispatchToken : String!
+        dispatch_sync(queue, {
+            nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
+            self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
+        })
         return nextDispatchToken
     }
 
     /// Removes a callback based on its token.
     public func unregister(token: String) {
         precondition(self.callbacks[token] != nil, "Dispatcher.unregister(...): \(token) does not map to a registered callback.")
-
-        self.callbacks.removeValueForKey(token)
+        dispatch_async(self.queue) { () -> Void in
+            self.callbacks.removeValueForKey(token)
+        }
     }
 
     /// Waits for the callbacks specified to be invoked before continuing execution
@@ -59,22 +65,22 @@ public class Dispatcher {
     
     /// Dispatches a payload to all registered callbacks.
     public func dispatch<T: Action>(action: T) {
-        precondition(!self.isDispatching, "Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.")
-
-        self.startDispatching(action)
-        
-        for callback in self.callbacks.values {
-            if let callback = callback as? DispatchCallback<T> {
-                switch callback.status {
-                case .Pending, .Handled:
-                    continue
-                default:
-                    self.invokeCallback(callback)
+        dispatch_async(queue) { () -> Void in
+            self.startDispatching(action)
+            
+            for callback in self.callbacks.values {
+                if let callback = callback as? DispatchCallback<T> {
+                    switch callback.status {
+                    case .Pending, .Handled:
+                        continue
+                    default:
+                        self.invokeCallback(callback)
+                    }
                 }
             }
+            
+            self.stopDispatching()
         }
-        
-        self.stopDispatching()
     }
 
     /// Set up bookkeeping needed when dispatching.
