@@ -22,20 +22,15 @@ public class Dispatcher {
     /// Registers a callback to be invoked with every dispatched payload. Returns
     /// a token that can be used with `waitFor()`.
     public func register<T: Action>(actionType: T.Type, handler: (T) -> Void) -> String {
-        var nextDispatchToken : String!
-        dispatch_sync(queue, {
-            nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
-            self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
-        })
+        let nextDispatchToken = "dispatcher_callback_\(self.lastId++)"
+        self.callbacks[nextDispatchToken] = DispatchCallback<T>(actionType: actionType, handler: handler)
         return nextDispatchToken
     }
 
     /// Removes a callback based on its token.
     public func unregister(token: String) {
         precondition(self.callbacks[token] != nil, "Dispatcher.unregister(...): \(token) does not map to a registered callback.")
-        dispatch_async(self.queue) { () -> Void in
-            self.callbacks.removeValueForKey(token)
-        }
+        self.callbacks.removeValueForKey(token)
     }
 
     /// Waits for the callbacks specified to be invoked before continuing execution
