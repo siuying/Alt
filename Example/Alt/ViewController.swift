@@ -10,7 +10,13 @@ import UIKit
 import Alt
 
 class ViewController: UITableViewController {
-    let todoStore = TodoStore(state: [])
+    var todoStore : TodoStore!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.todoStore = Alt.getStore(TodoStore.self)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +24,7 @@ class ViewController: UITableViewController {
         if App.isTestTarget() {
             return
         }
-
+        
         self.todoStore.listen { (state) -> (Void) in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.tableView.reloadData()                

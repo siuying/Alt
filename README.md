@@ -18,8 +18,9 @@ struct TodoActions {
 
 ### Step 2: Define Store and register action
 
-- Create a subclass of ``Store<State>`` with the model state as State
+- Create a Store class, which implement ``Store`` protocol with a ``typealiase State``
 - Bind Actions to handers, where the model perform action tasks
+- When the action has change model state, invoke ``self.emitChange()``
 
 ```swift
 class TodoStore : Store<[Todo]> {
@@ -36,6 +37,7 @@ class TodoStore : Store<[Todo]> {
 
     private func onCreate(action: TodoActions.Create) {
         self.state.append(Todo(title: action.title))
+        self.emitChange()
     }
 }
 ```

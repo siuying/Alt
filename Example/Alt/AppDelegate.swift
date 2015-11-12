@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alt
+
 class App {
     static func isTestTarget() -> Bool {
         return NSProcessInfo.processInfo().environment["XCInjectBundle"] != nil
