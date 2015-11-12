@@ -10,32 +10,6 @@ import XCTest
 import Alt
 import Nimble
 
-struct MyActions {
-    struct Increment : Action {
-        let value : Int
-    }
-}
-
-struct MyStoreState {
-    var count = 0
-}
-
-class MyStore : Store {
-    typealias State = MyStoreState
-    var state : State!
-    
-    required init() {
-        bindAction(MyActions.Increment.self) { (action) -> () in
-            self.state.count += action.value
-            self.emitChange()
-        }
-    }
-    
-    static func getInitState() -> State {
-        return MyStoreState(count: 0)
-    }
-}
-
 class StoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
