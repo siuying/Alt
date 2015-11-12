@@ -10,7 +10,7 @@ import Foundation
 
 let StoreChangeEvent = "CHANGE"
 
-public class Store<State> {
+public class Store<State> : NSObject {
     public typealias StoreListener = State -> ()
     private let dispatcher : Dispatcher
     private let eventEmitter : EventEmitter
