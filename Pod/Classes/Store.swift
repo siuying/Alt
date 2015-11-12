@@ -18,7 +18,7 @@ public protocol Store {
     init()
 
     /// Get the initial state of the store. 
-    /// Overriding point.
+    /// Your Store class must implement this.
     static func getInitState() -> State
 
     /// Store name, by default its the class name
@@ -45,8 +45,7 @@ public protocol Store {
     func emitChange()
 }
 
-public extension Store {
-   
+public extension Store {   
     func storeName() -> String {
         return String(self.dynamicType)
     }

@@ -11,27 +11,19 @@ import Alt
 
 class TodoStore : Store {
     typealias State = [Todo]
-    
+
     var state : State!
-    
+
+    static func getInitState() -> State {
+        return [Todo(title: "Task 1"), Todo(title: "Task 2"), Todo(title: "Task 3")]
+    }
+
     required init() {
         self.bindAction(TodoActions.Create.self, handler: self.onCreate)
-        self.bindAction(TodoActions.List.self, handler: self.onList)
     }
 
     private func onCreate(action: TodoActions.Create) {
         self.state.append(Todo(title: action.title))
         self.emitChange()
-    }
-    
-    private func onList(action: TodoActions.List) {
-        self.state = action.todos
-        self.emitChange()
-    }
-    
-    // MARK: Store
-
-    static func getInitState() -> State {
-        return []
     }
 }

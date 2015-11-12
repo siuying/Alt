@@ -19,14 +19,24 @@ struct TodoActions {
 ### Step 2: Define Store and register action
 
 - Create a Store class, which implement ``Store`` protocol with a ``typealiase State``
-- Bind Actions to handers, where the model perform action tasks
-- When the action has change model state, invoke ``self.emitChange()``
+- Use ``Alt.getStore(YourStore.self)`` to get a singleton instance of the store
+- Bind Actions to handers, where the store update it states. 
+- Invoke ``self.emitChange()`` to notify listeners about change of states in ``Store``
 
 ```swift
-class TodoStore : Store<[Todo]> {
-    init(state: [Todo]) {
-        super.init(state: state)
+class TodoStore : Store {
+    // define a typealias for the state of the model
+    typealias State = [Todo]
 
+    // and add a property of the State
+    var state : State!
+
+    // Set the initial state of the Store
+    static func getInitState() -> State {
+        return []
+    }
+
+    required init() {
         self.bindAction(TodoActions.Create.self, handler: self.onCreate)
 
         // alternatively, bind action with a block
@@ -45,7 +55,6 @@ class TodoStore : Store<[Todo]> {
 ### Step 3: Listen store's event at View
 
 - Register listeners to ``store.state`` change by ``Store.listen()``
-- Force an store update by calling ``store.emitChange()``
 
 ```swift
 self.todoStore.listen { (state) -> (Void) in

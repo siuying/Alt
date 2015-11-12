@@ -10,13 +10,13 @@ import Foundation
 
 public class Alt {
     public static let dispatcher = Dispatcher()
-    public static var eventEmitter = EventEmitter()
+    public static let eventEmitter = EventEmitter()
     
-    static var stores : [Any] = []
-    static var storeActionIds : [String: [String]] = [:]
-    static var storeSubscriptions : [String: [String:EventSubscription]] = [:]
-    static var lastId = 1
-    static var listenerQueue : dispatch_queue_t = dispatch_get_main_queue()
+    static private var stores : [Any] = []
+    static private var storeActionIds : [String: [String]] = [:]
+    static private var storeSubscriptions : [String: [String:EventSubscription]] = [:]
+    static private var lastId = 1
+    static private var listenerQueue : dispatch_queue_t = dispatch_get_main_queue()
 
     public static func getStore<S: Store>(storeType: S.Type) -> S {
         for store in stores where store is S {

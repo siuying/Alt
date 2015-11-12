@@ -30,8 +30,6 @@ class ViewController: UITableViewController {
                 self.tableView.reloadData()                
             })
         }
-
-        TodoActions.List().dispatch()
     }
 
     override func didReceiveMemoryWarning() {
