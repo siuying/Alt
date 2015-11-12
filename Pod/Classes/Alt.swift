@@ -25,7 +25,7 @@ public class Alt {
 
         // initialize the store if needed
         var newStore = storeType.init()
-        newStore.state = storeType.getInitState()
+        newStore.state = storeType.getInitialState()
         stores.append(newStore)
         return newStore
     }

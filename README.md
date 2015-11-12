@@ -32,7 +32,7 @@ class TodoStore : Store {
     var state : State!
 
     // Set the initial state of the Store
-    static func getInitState() -> State {
+    static func getInitialState() -> State {
         return []
     }
 

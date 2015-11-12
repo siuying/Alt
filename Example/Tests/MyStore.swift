@@ -16,7 +16,7 @@ struct MyActions {
 }
 
 struct MyStoreState {
-    var count = 0
+    var count = -1
 }
 
 class MyStore : Store {
@@ -30,7 +30,7 @@ class MyStore : Store {
         }
     }
     
-    static func getInitState() -> State {
+    static func getInitialState() -> State {
         return MyStoreState(count: 0)
     }
 }

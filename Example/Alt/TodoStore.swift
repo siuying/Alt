@@ -14,7 +14,7 @@ class TodoStore : Store {
 
     var state : State!
 
-    static func getInitState() -> State {
+    static func getInitialState() -> State {
         return [Todo(title: "Task 1"), Todo(title: "Task 2"), Todo(title: "Task 3")]
     }
 

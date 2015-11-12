@@ -10,6 +10,28 @@ import XCTest
 import Alt
 import Nimble
 
+struct AltTestsActions {
+    struct Increment : Action {
+        let value : Int
+    }
+}
+
+struct AltTestsStoreState {
+    var count = -1
+}
+
+class AltTestsStore : Store {
+    typealias State = AltTestsStoreState
+    var state : State!
+
+    required init() {
+    }
+
+    static func getInitialState() -> State {
+        return AltTestsStoreState(count: 0)
+    }
+}
+
 class AltTests: XCTestCase {
     
     override func setUp() {
@@ -23,8 +45,10 @@ class AltTests: XCTestCase {
     }
     
     func testGetStore() {
-        let store = Alt.getStore(MyStore.self)
-        let store2 = Alt.getStore(MyStore.self)
+        let store = Alt.getStore(AltTestsStore.self)
+        let store2 = Alt.getStore(AltTestsStore.self)
         expect(store === store2).to(beTrue(), description: "be a singleton")
+        
+        expect(store.state.count).to(equal(MyStore.getInitialState().count), description: "state should set to initial state")
     }
 }

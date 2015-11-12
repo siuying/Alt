@@ -19,7 +19,7 @@ public protocol Store {
 
     /// Get the initial state of the store. 
     /// Your Store class must implement this.
-    static func getInitState() -> State
+    static func getInitialState() -> State
 
     /// Store name, by default its the class name
     /// Overriding point.
