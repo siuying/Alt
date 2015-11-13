@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Alt"
-  s.version          = "0.3.0"
+  s.version          = "0.3.1"
   s.summary          = "Another Flux implementation for Swift."
 
   s.homepage         = "https://github.com/siuying/Alt"

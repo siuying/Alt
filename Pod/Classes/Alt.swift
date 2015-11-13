@@ -9,8 +9,8 @@
 import Foundation
 
 public class Alt {
-    public static let dispatcher = Dispatcher()
-    public static let eventEmitter = EventEmitter()
+    public static internal(set) var dispatcher = Dispatcher()
+    public static internal(set) var eventEmitter = EventEmitter()
     
     static private var stores : [Any] = []
     static private var storeActionIds : [String: [String]] = [:]
@@ -29,7 +29,17 @@ public class Alt {
         stores.append(newStore)
         return newStore
     }
-    
+
+    // Reset all global states, should only be used for testing
+    public static func reset() {
+        stores = []
+        storeActionIds = [:]
+        storeSubscriptions = [:]
+        lastId = 1
+        dispatcher = Dispatcher()
+        eventEmitter = EventEmitter()
+    }
+
     static func bindAction<S: Store, T: Action>(store: S, actionType: T.Type, handler: T -> ()) -> String {
         let id = self.dispatcher.register(actionType, handler: handler)
 

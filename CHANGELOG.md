@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Add ``Alt.reset()`` to make testing store and actions easier, by resetting the global states
+
 ## 0.3.0
 
 - Revised Store to be a protocol and extension, now any class can be a Store
